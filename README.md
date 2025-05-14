@@ -4,6 +4,8 @@
 
 Displays a bouncing IHP logo on the screen, with animated color gradient.
 
+![IHP Logo screensaver](screensaver.jpg)
+
 - [Read the documentation for project](docs/info.md)
 
 ## What is Tiny Tapeout?
