@@ -28,7 +28,7 @@ pinout:
   # Inputs
   ui[0]: "tile"
   ui[1]: "solid_color"
-  ui[2]: ""
+  ui[2]: "white_bg"
   ui[3]: ""
   ui[4]: "gamepad_latch"
   ui[5]: "gamepad_clk"

@@ -36,6 +36,7 @@ module tt_um_ihp_logo_screensaver (
   // Configuration
   wire cfg_tile = ui_in[0];
   wire cfg_solid_color = ui_in[1];
+  wire cfg_white_background = ui_in[2];
 
   // Tiny VGA Pmod
   assign uo_out = {hsync, B[0], G[0], R[0], vsync, B[1], G[1], R[1]};
@@ -90,7 +91,6 @@ module tt_um_ihp_logo_screensaver (
   wire pixel_value;
   reg [2:0] color_index;
   wire [5:0] pallete_color;
-  wire [5:0] color;
 
   wire [9:0] x = pix_x - logo_left;
   wire [9:0] y = pix_y - logo_top;
@@ -104,12 +104,14 @@ module tt_um_ihp_logo_screensaver (
 
   palette palette_inst (
       .color_index(color_index),
+      .white_background(cfg_white_background),
       .rrggbb(pallete_color)
   );
 
   wire [5:0] gradient_color = {1'b1, y[6:2] - x[6:2] + logo_left[6:2]};
-  assign color = cfg_solid_color ? pallete_color : gradient_color;
-
+  wire [5:0] fg_color = cfg_solid_color ? pallete_color : gradient_color;
+  wire [5:0] bg_color = cfg_white_background ? 6'b111111 : 6'b000000;
+  wire [5:0] pixel_color = pixel_value && logo_pixels ? fg_color : bg_color;
 
   // RGB output logic
   always @(posedge clk) begin
@@ -121,10 +123,10 @@ module tt_um_ihp_logo_screensaver (
       R <= 0;
       G <= 0;
       B <= 0;
-      if (video_active && logo_pixels) begin
-        R <= pixel_value ? color[5:4] : 0;
-        G <= pixel_value ? color[3:2] : 0;
-        B <= pixel_value ? color[1:0] : 0;
+      if (video_active) begin
+        R <= pixel_color[5:4];
+        G <= pixel_color[3:2];
+        B <= pixel_color[1:0];
       end
     end
   end

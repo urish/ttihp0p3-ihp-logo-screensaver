@@ -8,6 +8,7 @@
 
 module palette (
     input  wire [2:0] color_index,
+    input  wire       white_background,
     output wire [5:0] rrggbb
 );
 
@@ -24,6 +25,6 @@ module palette (
     palette[7] = 6'b111111;  // white
   end
 
-  assign rrggbb = palette[color_index];
+  assign rrggbb = color_index == 7 && white_background ? 6'b000000 : palette[color_index];
 
 endmodule
